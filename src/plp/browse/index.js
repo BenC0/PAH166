@@ -1,3 +1,4 @@
+import "./browse.css"
 import { TestElement, TestElements } from "../../norman";
 
 export default class Browse extends TestElement {
