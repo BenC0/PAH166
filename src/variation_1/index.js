@@ -6,10 +6,9 @@ const conditions = _ => {
     return !!document.querySelector("body")
 }
 
-function action() {
-    this.log("Action loaded")
+function add_browse_by(variation) {
+    variation.log(browse_by, true)
     const browse_by = new Browse()
-    this.log(browse_by, true)
     browse_by.new_links_element._insert("#searchBasedNavigation_widget", "beforeBegin")
     browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
     if (browse_by.original_links.nodes.length > 5) {
@@ -19,6 +18,11 @@ function action() {
     } else {
         browse_by.new_links_toggle.node.remove()
     }
+}
+
+function action() {
+    this.log("Action loaded")
+    add_browse_by(this)
 }
 
 function fallback() {
