@@ -1,10 +1,11 @@
-import { Variant, TestElement, TestElements } from "../../../dist/index"
+import { Variant, TestElement, TestElements } from "../norman"
 
 const test_config = {
     id: "ex002",
     google_analytics: 29,
-    hotjar: false
+    hotjar: true
 }
+
 const conditions = _ => {
     return !!document.querySelector("body")
 }
