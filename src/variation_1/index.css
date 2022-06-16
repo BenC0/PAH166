@@ -1,4 +1,6 @@
 .pah .pah166_loaded,
 body.pah166_loaded {
-
+    & [test="pah166"] {
+        --border-radius: 40px;
+    }
 }

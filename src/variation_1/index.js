@@ -1,3 +1,4 @@
+import "./index.css"
 import test_config from "../test_config.js"
 import { Variant, TestElement, TestElements } from "../norman"
 import Browse from "../plp/browse"

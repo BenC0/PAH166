@@ -23,9 +23,16 @@ body.pah166_loaded [test="pah166"] {
 
         color: #666666;
         background: #F7F7F7;
+        transition: all .15s ease-in;
+        border-radius: var(--border-radius);
 
         &:first-child() {
             margin-left: 0;
+        }
+
+
+        &:hocus {
+            background: #ededed;
         }
     }
 
