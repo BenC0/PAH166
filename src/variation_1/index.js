@@ -12,9 +12,13 @@ function action() {
     this.log(browse_by, true)
     browse_by.new_links_element._insert("#searchBasedNavigation_widget", "beforeBegin")
     browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
-    browse_by.new_links_toggle.node.addEventListener("click", e => {
-        browse_by._toggle_links()
-    })
+    if (browse_by.original_links.nodes.length > 5) {
+        browse_by.new_links_toggle.node.addEventListener("click", e => {
+            browse_by._toggle_links()
+        })
+    } else {
+        browse_by.new_links_toggle.node.remove()
+    }
 }
 
 function fallback() {
