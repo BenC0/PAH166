@@ -592,8 +592,6 @@ var TestElement = /*#__PURE__*/function () {
     this.selector = selector; // Handle HTML strings
 
     if (typeof selector === "string") {
-      console.warn(_typeof(selector), selector);
-
       if (selector[0] === "<" && selector[selector.length - 1] === ">" && selector.length >= 3) {
         // selector is a HTML string
         this.html = selector;

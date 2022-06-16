@@ -1,5 +1,6 @@
 import test_config from "../test_config.js"
 import { Variant, TestElement, TestElements } from "../norman"
+import Browse from "../plp/browse"
 
 const conditions = _ => {
     return !!document.querySelector("body")
@@ -7,6 +8,9 @@ const conditions = _ => {
 
 function action() {
     this.log("Action loaded")
+    const browse_by = new Browse()
+    this.log(browse_by, true)
+    browse_by.new_links_element._insert("#searchBasedNavigation_widget", "beforeBegin")
 }
 
 function fallback() {
