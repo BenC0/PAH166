@@ -14,7 +14,13 @@ export default class Browse extends TestElement {
     }
 
     _create_new_link_element_html() {
-        return `<div test="pah166" class="browse_links">${this.new_links_html.join("")}</div>`
+        return `<div test="pah166" class="browse_links">
+            ${this.new_links_html.join("")}
+            <a href="#toggle_links" test="pah166" class="browse_link" tabindex=${this.new_links_html.length}>
+                <span class="show_links">+</span>
+                <span class="hide_links">-</span>
+            </a>
+        </div>`
     }
 
     _get_original_links() {
@@ -23,5 +29,22 @@ export default class Browse extends TestElement {
 
     _format_link(link, index) {
         return `<a href="${link.node.getAttribute("href")}" test="pah166" class="browse_link" tabindex=${index}>${link._text()}</a>`
+    }
+
+    _toggle_links() {
+        console.warn(this.new_links_element)
+        if(this.new_links_element._class().contains("show_all")) {
+            this._hide_links()
+        } else {
+            this._show_links()
+        }
+    }
+
+    _show_links() {
+        this.new_links_element._class("show_all")
+    }
+
+    _hide_links() {
+        this.new_links_element._class("show_all", false)
     }
 }
