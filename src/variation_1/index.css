@@ -1,6 +1,16 @@
 .pah .pah166_loaded,
 body.pah166_loaded {
     & [test="pah166"] {
-        --border-radius: 40px;
+        --border-radius: 36px;
+        --black: #2A2A2A;
+        --white: #ffffff;
+        --smoke: #DCDCDC;
+        --charcoal: #6C6C70;
+        --off-white: #F7F7F7;
+        --pets-brand-red: #CE2010;
+        --pets-brand-green: #54B947;
+        --pets-brand-purple: #5A2C82;
+        --pets-brand-dark-green: #00551C;
+        --transition-curve: cubic-bezier(0.14, 0.51, 0.95, 0.88);
     }
 }

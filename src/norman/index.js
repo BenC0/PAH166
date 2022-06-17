@@ -521,12 +521,26 @@ var Variant = /*#__PURE__*/function (_Test) {
       if (typeof this.google_analytics === "number") {
         var eventObject = {
           'event': 'CRO_Test_Impression',
-          'testID': this.id,
           'dimension': this.google_analytics,
+          'testID': this.id,
           'variation': this.name
         };
         this.track_event_object(eventObject);
       }
+
+      this.track_content_square();
+    }
+  }, {
+    key: "track_content_square",
+    value: function track_content_square() {
+      var csTypeVendorPrefix = "AB_ABT_";
+      var csKey = csTypeVendorPrefix + this.id;
+      window._uxa = window._uxa || [];
+
+      _uxa.push(["trackDynamicVariable", {
+        key: csKey,
+        value: this.name
+      }]);
     }
   }, {
     key: "track_event",
@@ -582,7 +596,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".nMask_container{position:relative}.nMask_container .nMask{background:#ededed;overflow:hidden}.nMask_container .nMask,.nMask_container .nMask:after{bottom:0;left:0;position:absolute;right:0;top:0}.nMask_container .nMask:after{-webkit-animation:nMask_glimmer 1s infinite;animation:nMask_glimmer 1s infinite;background:linear-gradient(90deg,transparent,#dcdcdc,transparent);content:\"\"}@-webkit-keyframes nMask_glimmer{0%{transform:translateX(-100%)}to{transform:translateX(100%)}}@keyframes nMask_glimmer{0%{transform:translateX(-100%)}to{transform:translateX(100%)}}";
+var css_248z = ".nMask_container{position:relative}.nMask_container .nMask{background:#ededed;overflow:hidden}.nMask_container .nMask,.nMask_container .nMask:after{bottom:0;left:0;position:absolute;right:0;top:0;z-index:123456789}.nMask_container .nMask:after{-webkit-animation:nMask_glimmer 1s infinite;animation:nMask_glimmer 1s infinite;background:linear-gradient(90deg,transparent,#dcdcdc,transparent);content:\"\"}@-webkit-keyframes nMask_glimmer{0%{transform:translateX(-100%)}to{transform:translateX(100%)}}@keyframes nMask_glimmer{0%{transform:translateX(-100%)}to{transform:translateX(100%)}}";
 styleInject(css_248z);
 
 var TestElement = /*#__PURE__*/function () {

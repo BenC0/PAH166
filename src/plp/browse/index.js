@@ -1,4 +1,4 @@
-import "./browse.css"
+import "./index.css"
 import { TestElement, TestElements } from "../../norman";
 
 export default class Browse extends TestElement {
@@ -32,7 +32,6 @@ export default class Browse extends TestElement {
     }
 
     _toggle_links() {
-        console.warn(this.new_links_element)
         if(this.new_links_element._class().contains("show_all")) {
             this._hide_links()
         } else {
