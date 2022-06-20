@@ -40,7 +40,7 @@ body.pah166_loaded {
                 & .facet_option {
                     font-size: 1em;
                     padding-left: 0;
-                    padding: .8em 2em;
+                    padding: .8em 2em .8em 0em;
 
                     & .name {
                         flex-grow: 1;
@@ -68,6 +68,22 @@ body.pah166_loaded {
                     overflow: hidden;
                     padding: 0 1.5rem;
                     transition: all .35s var(--transition-curve);
+
+                    & .checkbox {
+                        --size: 1em;
+                        display: block;
+                        width: var(--size);
+                        border-radius: 4px;
+                        height: var(--size);
+                        margin-right: var(--size);
+                        background-color: var(--smoke);
+                    }
+
+                    & [is_active="true"] {
+                        & .checkbox {
+                            background-color: var(--pets-brand-green);
+                        }
+                    }
                 }
 
                 & .active {
