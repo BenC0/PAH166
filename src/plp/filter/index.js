@@ -1,5 +1,5 @@
 import "./index.css"
-import { TestElements, TestElement, getHighestZIndex } from "../../norman";
+import { TestElements, TestElement, getHighestZIndex, watchForChange, debounce } from "../../norman";
 
 export function formatFacetName(name) { 
     name = name.trim()
@@ -99,15 +99,63 @@ export class TestFilter {
         this.facet_options.forEach(option => {
             option.node.addEventListener("click", e => {
                 this._select_facet_option(e.currentTarget, this.facets.facets)
-                this._refresh_factes()
+                this._refresh_facets()
             })
         })
+
+        this.plp_section = new TestElement("#searchBasedNavigation_widget")
+        watchForChange(this.plp_section.node, (MutationRecords) => {
+            let ready_to_refresh = false
+            if(!!MutationRecords) {
+                MutationRecords.forEach(record => {
+                    record.addedNodes.forEach(addedNode => {
+                        if(!!addedNode.classList) {
+                            if(addedNode.classList.contains("layout-product-tile-holder")) {
+                                ready_to_refresh = true
+                            }
+                        }
+                    })
+                })
+            }
+            if(ready_to_refresh) {
+                this._refresh_facets()
+            }
+        }, { subtree: true, childList: true, attributes: false})
     }
 
-    _refresh_factes() {
-        // TODO: Update options on click, this needs to be dynamic with as little perceived flicker as possible...
+    _refresh_facets() {
         this.facets = new Facets()
-        console.warn(this.facets)
+        // loop through facets
+        this.facets.facets.forEach(facet => {
+            // loop through options
+            let facet_name = facet.formatted_name
+            let facet_el = document.querySelector(`.facet_options[facet="${facet_name}"]`)
+            if(!!facet_el) {
+                let facet_container = new TestElement(`.facet_options[facet="${facet_name}"]`)
+                facet.values.forEach(value => {
+                    let option_name = value.formatted_name
+                    let preexisting = facet_el.querySelector(`.facet_option[option="${option_name}"]`)
+                    let exists = !!preexisting
+                    if(exists) {
+                        console.warn("Updating facet option", preexisting, value)
+                        // if option already exists
+                        // update quantity & active state
+                        preexisting.querySelector(".quantity").textContent = value.quantity
+                        preexisting.setAttribute("is_active", value.is_active)
+                    } else {
+                        // if option not exists
+                        // create option and add to facet
+                        let value_html = this._create_option_html(value)
+                        facet_container._append(value_html)
+                    }
+                })
+            } else {
+                // if facet doesn't already exist, create it
+                let new_facet_html = this._create_facet_html(facet)
+                let container = new TestElement(".filters[test=pah166] .facets")
+                container._append(new_facet_html)
+            }
+        })
     }
 
     _create_option_html(option, index) {
@@ -143,10 +191,13 @@ export class TestFilter {
     _find_facet_option(target) {
         let facet_index = target.parentNode.getAttribute("facet");
         let target_facet = document.querySelector(`.side-nav-level0[facet="${facet_index}"]`)
-        let option_index = target.getAttribute("option");
-        let target_option = target_facet.querySelector(`[option="${option_index}"]`)
-        console.warn(facet_index, option_index)
-        return target_option
+        if(!!target_facet) {
+            let option_index = target.getAttribute("option");
+            let target_option = target_facet.querySelector(`[option="${option_index}"]`)
+            return target_option
+        } else {
+            return null
+        }
     }
 
     _select_facet_option(target, facets) {
