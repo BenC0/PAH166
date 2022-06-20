@@ -1,5 +1,5 @@
 import "./index.css"
-import { TestElements, TestElement, getHighestZIndex, watchForChange, debounce } from "../../norman";
+import { TestElements, TestElement, getHighestZIndex, watchForChange, debounce, Test } from "../../norman";
 
 export function formatFacetName(name) { 
     name = name.trim()
@@ -36,7 +36,7 @@ export class Facet {
             let fO = new FacetOption(element)
             this.values.push(fO)
             if (fO.is_active) {
-                this.active_values.push(new FacetOption(element).name)
+                this.active_values.push(fO.name)
             }
         })
     }
@@ -50,8 +50,12 @@ export class Facets extends TestElements {
 
     _map_facets() {
         this.facets = []
+        this.facets_active = false
         this._loop(facet => {
             let fc = new Facet(facet)
+            if(fc.active_values.length !== 0) {
+                this.facets_active = true
+            }
             if (fc.header_name !== "Price") {
                 this.facets.push(fc)
             }
@@ -85,10 +89,15 @@ export class TestFilter {
                     <span class="close">X</span>
                 </header>
                 ${this.facets_html.join("")}
+                <footer class="cta_container">
+                    <a href="#" class="cta clear ghost${this.facets.facets_active ?  " active": ""}">Clear all</a>
+                    <a href="#" class="cta view primary">View</a>
+                </footer>
             </div>
         </div>`
         this.element = new TestElement(this.html)
         this.element._insert("body", "afterBegin")
+        this._update_cta_count()
         this.facet_headers = this.element._find(".facet_header")
         this.facet_headers.forEach(header => {
             header.node.addEventListener("click", e => {
@@ -102,6 +111,7 @@ export class TestFilter {
                 this._refresh_facets()
             })
         })
+        this.product_count = this._get_product_count()
 
         this.plp_section = new TestElement("#searchBasedNavigation_widget")
         watchForChange(this.plp_section.node, (MutationRecords) => {
@@ -119,12 +129,34 @@ export class TestFilter {
             }
             if(ready_to_refresh) {
                 this._refresh_facets()
+                this._update_cta_count()
             }
         }, { subtree: true, childList: true, attributes: false})
     }
 
+    _update_cta_count() {
+        this.product_count = this._get_product_count()
+        let cta = this.element._find(".cta_container .view")
+        cta.forEach(c => c._text(`View (${this.product_count})`))
+    }
+
+    _get_product_count() {
+        let el = new TestElement(`[data-module="results_view_showing_items"] .showing-items__paragraph`)
+        let output = el._text()
+        output = output.match(/[0-9]* items/g)
+        output = output.pop()
+        output = output.replace(/[a-zA-Z]| /g, "")
+        return output
+    }
+
     _refresh_facets() {
         this.facets = new Facets()
+        let filters_clear = this.element._find(".cta_container .clear")
+        if (this.facets.facets_active) {
+            filters_clear.forEach(el => el._class("active", true))
+        } else {
+            filters_clear.forEach(el => el._class("active", false))
+        }
         // loop through facets
         this.facets.facets.forEach(facet => {
             // loop through options
@@ -137,7 +169,6 @@ export class TestFilter {
                     let preexisting = facet_el.querySelector(`.facet_option[option="${option_name}"]`)
                     let exists = !!preexisting
                     if(exists) {
-                        console.warn("Updating facet option", preexisting, value)
                         // if option already exists
                         // update quantity & active state
                         preexisting.querySelector(".quantity").textContent = value.quantity
@@ -216,11 +247,15 @@ export class Filter extends TestElement {
         this.cta.node.addEventListener("click", e => {
             this._toggle_filters()
         })
-        this.filters_close = this.new_filters.element._find(".close, .background")
+        this.filters_close = this.new_filters.element._find(".close, .background, .cta.view")
         this.filters_close.forEach(close => {
             close.node.addEventListener("click", e => {
                 this._hide_filters()
             })
+        })
+        this.filters_clear = this.new_filters.element._find(".cta.clear")
+        this.filters_clear.forEach(el => {
+            el.node.addEventListener("click", SearchBasedNavigationDisplayJS.clearSearchFilter)
         })
     }
 
