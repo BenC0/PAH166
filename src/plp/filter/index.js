@@ -8,6 +8,7 @@ export class FacetOption {
         if (!!option.node.querySelector('.side-nav-level2__quantity')) {
             this.quantity = option.node.querySelector('.side-nav-level2__quantity').textContent
         }
+        this.is_active = option.node.querySelector('.side-nav-level2__box').classList.contains('active')
         this.name = option.node.getAttribute("title")
     }
 }
@@ -79,10 +80,14 @@ export class TestFilter {
         this.facet_options.forEach(option => {
             option.node.addEventListener("click", e => {
                 this._select_facet_option(e.currentTarget, this.facets)
-                // TODO: Update options on click, this needs to be dynamic with as little perceived flicker as possible...
-                this.facets = new Facets().facets
             })
         })
+    }
+
+    _refresh_factes() {
+        // TODO: Update options on click, this needs to be dynamic with as little perceived flicker as possible...
+        this.facets = new Facets().facets
+        console.warn(this.facets)
     }
 
     _create_option_html(option, index) {
@@ -119,6 +124,7 @@ export class TestFilter {
         let option_index = parseInt(target.getAttribute("option-index"));
         let selected_option = facets[facet_index].values[option_index]
         selected_option.original_node.node.click()
+        this._refresh_factes()
     }
 }
 
