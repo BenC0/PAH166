@@ -9,7 +9,7 @@ body.pah166_loaded {
             align-self: flex-end;
             font-family: "Museo", sans-serif;
 
-            & > div:not(.nMask) {
+            & > div:not(.nMask):not(.quick_filters) {
                 --padding: 1em;
                 --border-style: 1px solid #C8C8C8;
 
@@ -28,19 +28,13 @@ body.pah166_loaded {
                     padding: var(--padding);
                 }
 
-                &:first-child {
+                &.filter_by {
                     border-top-left-radius: var(--border-radius);
-                    &,
-                    & #sort_by_select,
-                    & #sort_by_select:last-child {
-                        border-bottom-left-radius: var(--border-radius);
-                    }
+                    border-bottom-left-radius: var(--border-radius);
                 }
                 
-                &:last-child {
-                    &:not(:only-child) {
-                        border-left: 0;
-                    }
+                &.sort_by {
+                    border-left: 0;
                     border-top-right-radius: var(--border-radius);
                     &,
                     & #sort_by_select,

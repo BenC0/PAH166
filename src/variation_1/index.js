@@ -24,7 +24,7 @@ function add_filter(variation) {
 function add_sort_by(variation) {
     const sort_by = new Sort()
     variation.log(sort_by)
-    sort_by.new_sort._insert(`.sort_and_filter_container[test="pah166"]`)
+    sort_by.new_sort._insert(`.sort_and_filter_container[test="pah166"]`, "beforeEnd")
     sort_by.new_sort._find("li.sort_option").forEach(element => {
         element.node.addEventListener("click", e => {
             sort_by._update_old(e, sort_by)

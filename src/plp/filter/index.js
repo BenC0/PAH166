@@ -39,6 +39,8 @@ export class Facet {
                 this.active_values.push(fO.name)
             }
         })
+        this.active_count = this.active_values.length
+        this.quick_facet = new TestQuickFacet(this)
     }
 }
 
@@ -73,6 +75,13 @@ export class FilterButton extends TestElement {
     }
 }
 
+export class TestQuickFacet extends TestElement {
+    constructor(facet) {
+        console.warn(facet)
+        super(`<a href="facet#${facet.formatted_name}" test="pah166" class="facet_link" active_count="${facet.active_count}">${facet.header_name} <span class="count">${facet.active_count}</span></a>`)
+    }
+}
+
 export class TestFilter {
     constructor(facets, state) {
         this.facets = facets
@@ -81,6 +90,7 @@ export class TestFilter {
         this.facets.facets.forEach((facet, index) => {
             this.facets_html.push(this._create_facet_html(facet, index))
         })
+        this._init_quick_facets()
         this.html = `<div test="pah166" class="filters ${this.state}" style="z-index: ${getHighestZIndex("*") + 1}">
             <div class="background"></div>
             <div class="facets">
@@ -149,8 +159,28 @@ export class TestFilter {
         return output
     }
 
+    _init_quick_facets() {
+        document.querySelector(`.sort_and_filter_container[test="pah166"] .quick_filters`).innerHTML = ""
+        this.facets.facets.forEach((facet, index) => {
+            if(index < 5) {
+                facet.quick_facet._insert(`.sort_and_filter_container[test="pah166"] .quick_filters`, "beforeEnd")
+                facet.quick_facet.node.addEventListener("click", e=> {
+                    e.preventDefault()
+                    let target_facet_selector = `.facet_header[facet="${e.target.getAttribute("href").split("#").pop()}"]`
+                    let target_facet = document.querySelector(target_facet_selector)
+                    if(!!target_facet) {
+                        document.querySelectorAll(".facet_header").forEach(el => el.classList.remove("active"))
+                        target_facet.classList.add("active")
+                        this.element._class("active")
+                    }
+                })
+            }
+        })
+    }
+
     _refresh_facets() {
         this.facets = new Facets()
+        this._init_quick_facets()
         let filters_clear = this.element._find(".cta_container .clear")
         if (this.facets.facets_active) {
             filters_clear.forEach(el => el._class("active", true))
@@ -241,12 +271,8 @@ export class Filter extends TestElement {
     constructor() {
         super(`#facetSection`)
         this.facets = new Facets()
-        this.cta = new FilterButton()
-        this.cta._insert(".sort_and_filter_container", "afterBegin")
         this.new_filters = new TestFilter(this.facets, "")
-        this.cta.node.addEventListener("click", e => {
-            this._toggle_filters()
-        })
+        this.cta = new FilterButton()
         this.filters_close = this.new_filters.element._find(".close, .background, .cta.view")
         this.filters_close.forEach(close => {
             close.node.addEventListener("click", e => {
@@ -256,6 +282,10 @@ export class Filter extends TestElement {
         this.filters_clear = this.new_filters.element._find(".cta.clear")
         this.filters_clear.forEach(el => {
             el.node.addEventListener("click", SearchBasedNavigationDisplayJS.clearSearchFilter)
+        })
+        this.cta._insert(`.sort_and_filter_container[test="pah166"]`, "beforeEnd")
+        this.cta.node.addEventListener("click", e => {
+            this._toggle_filters()
         })
     }
 
