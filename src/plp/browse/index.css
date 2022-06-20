@@ -60,7 +60,7 @@ body.pah166_loaded {
                 }
             }
             &:not(.show_all) {
-                & .browse_link:nth-child(n + 5):not([href="#toggle_links"]) {
+                & .browse_link:nth-child(n + 6):not([href="#toggle_links"]) {
                     display: none;
                 }
             }

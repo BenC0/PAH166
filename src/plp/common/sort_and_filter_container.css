@@ -22,6 +22,12 @@ body.pah166_loaded {
                     width: 100%;
                 }
 
+                & .heading {
+                    cursor: pointer;
+                    background: #fff;
+                    padding: var(--padding);
+                }
+
                 &:first-child {
                     border-top-left-radius: var(--border-radius);
                     &,

@@ -11,11 +11,6 @@ body.pah166_loaded {
             position: relative;
             background: #fff;
 
-            & .heading {
-                background: #fff;
-                padding: var(--padding);
-            }
-
             & #sort_by_select {
                 --border-radius: 36px;
 

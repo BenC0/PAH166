@@ -13,4 +13,19 @@ body.pah166_loaded {
         --pets-brand-dark-green: #00551C;
         --transition-curve: cubic-bezier(0.14, 0.51, 0.95, 0.88);
     }
+
+    & [data-module="side_nav_container"] {
+        display: none;
+    }
+
+    & [data-module="layout_product_tile_holder"] {
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-rows: auto;
+        grid-template-columns: repeat(4, 1fr);
+
+        & > *:not(.product-tile) {
+            display: none;
+        }
+    }
 }

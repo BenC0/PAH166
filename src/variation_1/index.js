@@ -3,10 +3,22 @@ import test_config from "../test_config.js"
 import { Variant, TestElement, TestElements, watchForChange } from "../norman"
 import Browse from "../plp/browse"
 import Sort from "../plp/sort"
+import { Filter, FilterButton } from "../plp/filter"
 import _init_sort_and_filter_container from "../plp/common/init_sort_and_filter_container"
 
 const conditions = _ => {
     return !!document.querySelector("body")
+}
+
+function update_layout() {
+    const layout = new TestElement(`[data-module="container_80"]`)
+    layout._class("container-100")
+    layout._class("container-80", false)
+}
+
+function add_filter(variation) {
+    const filter = new Filter()
+    variation.log(filter)
 }
 
 function add_sort_by(variation) {
@@ -26,7 +38,7 @@ function add_browse_by(variation) {
     variation.log(browse_by)
     browse_by.new_links_element._insert(`.sort_and_filter_container[test="pah166"]`, "beforeBegin")
     browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
-    if (browse_by.original_links.nodes.length > 5) {
+    if (browse_by.original_links.nodes.length > 6) {
         browse_by.new_links_toggle.node.addEventListener("click", e => {
             browse_by._toggle_links()
         })
@@ -50,8 +62,10 @@ function action() {
     this.log("Action loaded")
     let sort_and_filter_container = _init_sort_and_filter_container()
     sort_and_filter_container._mask()
-    
+    update_layout()
     add_browse_by(this)
+    add_filter(this)
+    
     let sort_by = add_sort_by(this)
     watch_and_update(sort_by)
 
