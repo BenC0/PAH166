@@ -79,6 +79,7 @@ export class TestFilter {
         this.facet_options.forEach(option => {
             option.node.addEventListener("click", e => {
                 this._select_facet_option(e.currentTarget, this.facets)
+                // TODO: Update options on click, this needs to be dynamic with as little perceived flicker as possible...
                 this.facets = new Facets().facets
             })
         })
@@ -131,7 +132,7 @@ export class Filter extends TestElement {
         this.cta.node.addEventListener("click", e => {
             this._toggle_filters()
         })
-        this.filters_close = this.new_filters.element._find(".close")
+        this.filters_close = this.new_filters.element._find(".close, .background")
         this.filters_close.forEach(close => {
             close.node.addEventListener("click", e => {
                 this._hide_filters()
