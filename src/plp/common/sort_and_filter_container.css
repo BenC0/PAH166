@@ -2,7 +2,7 @@
 body.pah166_loaded {
     & [test="pah166"] {
         &.sort_and_filter_container {
-            width: 360px;
+            width: 100%;
             display: flex;
             font-size: 12px;
             font-weight: 400;
@@ -13,7 +13,7 @@ body.pah166_loaded {
                 --padding: 1em;
                 --border-style: 1px solid #C8C8C8;
 
-                width: 50%;
+                width: clamp(120px, 50%, 180px);
                 text-align: left;
                 padding: 0 1.666em;
                 border: var(--border-style);
