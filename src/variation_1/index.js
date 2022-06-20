@@ -37,6 +37,14 @@ function add_browse_by(variation) {
     const browse_by = new Browse()
     variation.log(browse_by)
     browse_by.new_links_element._insert(`.sort_and_filter_container[test="pah166"]`, "beforeBegin")
+    browse_by.new_links = new TestElements(`${browse_by.new_links_element.selector} .browse_link:not([href="#toggle_links"])`)
+    browse_by.new_links._loop(element => {
+        element.node.addEventListener("click", e => {
+            variation.track_event(`Clicked Browse Link`)
+            variation.track_event(`Clicked Browse Link: ${e.target.getAttribute("href")}`)
+        })
+    })
+
     browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
     if (browse_by.original_links.nodes.length > 6) {
         browse_by.new_links_toggle.node.addEventListener("click", e => {
