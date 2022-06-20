@@ -52,7 +52,6 @@ export class FilterButton extends TestElement {
 
 export class TestFilter {
     constructor(facets) {
-        console.warn(facets)
         this.facets = facets.facets
         this.facets_html = []
         this.facets.forEach((facet, index) => {
