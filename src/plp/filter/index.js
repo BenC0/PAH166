@@ -18,8 +18,13 @@ export class Facet {
         this.header = facet._find(".side-nav-level0__header").pop()
         this.header_name = this.header._text()
         this.values = []
+        this.active_values = []
         facet._find(`.side-nav-level2__header`).forEach(element => {
-            this.values.push(new FacetOption(element))
+            let fO = new FacetOption(element)
+            this.values.push(fO)
+            if (fO.is_active) {
+                this.active_values.push(new FacetOption(element).name)
+            }
         })
     }
 }
