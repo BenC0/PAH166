@@ -77,7 +77,6 @@ export class FilterButton extends TestElement {
 
 export class TestQuickFacet extends TestElement {
     constructor(facet) {
-        console.warn(facet)
         super(`<a href="facet#${facet.formatted_name}" test="pah166" class="facet_link" active_count="${facet.active_count}">${facet.header_name} <span class="count">${facet.active_count}</span></a>`)
     }
 }
