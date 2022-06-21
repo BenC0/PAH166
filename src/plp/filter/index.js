@@ -69,6 +69,16 @@ export class FilterButton extends TestElement {
     constructor() {
         super(`<div test="pah166" class="filter_by">
             <p class="heading">
+                <span class="icon">
+                    <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="1.03223" y1="1.25" x2="14.0322" y2="1.25" stroke="black" stroke-linecap="round"/>
+                        <line x1="1.03223" y1="6.69434" x2="14.0322" y2="6.69434" stroke="black" stroke-linecap="round"/>
+                        <line x1="1.03223" y1="12.0741" x2="14.0322" y2="12.0741" stroke="black" stroke-linecap="round"/>
+                        <path d="M11.8782 7C11.8782 7.72879 11.3419 8.25 10.7628 8.25C10.1838 8.25 9.64746 7.72879 9.64746 7C9.64746 6.27121 10.1838 5.75 10.7628 5.75C11.3419 5.75 11.8782 6.27121 11.8782 7Z" fill="#F5F5F5" stroke="black"/>
+                        <path d="M5.4168 1.75C5.4168 2.47879 4.88049 3 4.30142 3C3.72234 3 3.18604 2.47879 3.18604 1.75C3.18604 1.02121 3.72234 0.5 4.30142 0.5C4.88049 0.5 5.4168 1.02121 5.4168 1.75Z" fill="#F5F5F5" stroke="black"/>
+                        <path d="M5.4168 12.25C5.4168 12.9788 4.88049 13.5 4.30142 13.5C3.72234 13.5 3.18604 12.9788 3.18604 12.25C3.18604 11.5212 3.72234 11 4.30142 11C4.88049 11 5.4168 11.5212 5.4168 12.25Z" fill="#F5F5F5" stroke="black"/>
+                    </svg>
+                </span>
                 <span class="label">Filter by</span>
             </p>
         </div>`)
@@ -95,7 +105,11 @@ export class TestFilter {
             <div class="facets">
                 <header>
                     <p class="title">Filter by</p>
-                    <span class="close">X</span>
+                    <span class="close">
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L14 14M14 1L1 14" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
                 </header>
                 ${this.facets_html.join("")}
                 <footer class="cta_container">
@@ -229,7 +243,9 @@ export class TestFilter {
     _create_facet_html(facet, index) {
         let header_html = `<header class="facet_header" facet="${facet.formatted_name}">
             <span class="name">${facet.header_name}</span>
-            <span class="chevron">></span>
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.6 8.3c0 .1-.1.3-.2.4l-8.2 8.2c-.1 0-.2.1-.4.1s-.3-.1-.4-.2L3.3 8.7c-.1-.1-.2-.3-.2-.4 0-.1.1-.3.2-.4l.8-.9c.1-.1.3-.2.4-.2.2 0 .4.1.5.2l6.9 6.9L18.7 7c.1-.1.3-.2.4-.2s.3.1.4.2l.9.9c.1.1.2.2.2.4z" fill="#000"/></svg>
+            </div>
         </header>`
         let options_html = `<ul class="facet_options" facet="${facet.formatted_name}">
             ${facet.values.map((value, index) => this._create_option_html(value, index)).join("")}

@@ -5,62 +5,76 @@ body.pah166_loaded {
         display: none;
     }
     
-    & .sort_and_filter_container .quick_filters {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-
-        & .facet_link {
-            padding: 1em;
-            font-size: 1em;
-            border-radius: 28px;
-            align-items: center;
-            display: inline-flex;
-            text-decoration: none;
-            color: var(--charcoal);
-            border: 1px solid var(--smoke);
-
-            &:not(:last-child) {
-                margin-right: 1em;
-            }
-
-            & .count {
-                --size: 1.4em;
-                font-weight: 600;
-                width: var(--size);
-                height: var(--size);
-                border-radius: 100%;
-                margin-left: calc(var(--size) / 2);
-
+    & .sort_and_filter_container {
+        & .filter_by {
+            cursor: pointer;
+            
+            & .heading {
+                display: flex;
                 align-items: center;
-                display: inline-flex;
-                justify-content: center;
-
-                background: var(--white);
-                font-size: calc(var(--size) * .8);
-                color: var(--pets-brand-dark-green);
-            }
-
-            &[active_count="0"] {
-                & .count {
-                    width: 0;
-                    margin: 0;
-                    opacity: 0;
-                    overflow: hidden;
+    
+                & .icon {
+                    margin-right: 1em;
                 }
             }
+        }
+        & .quick_filters {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
 
-            &:not([active_count="0"]) {
-                color: var(--white);
-                background: var(--pets-brand-dark-green);
-                border-color: var(--pets-brand-dark-green);
-            }
-            &:hocus {
-                color: var(--white);
-                background: var(--pets-brand-green);
-                border-color: var(--pets-brand-green);
+            & .facet_link {
+                padding: 1em;
+                font-size: 1em;
+                border-radius: 28px;
+                align-items: center;
+                display: inline-flex;
+                text-decoration: none;
+                color: var(--charcoal);
+                border: 1px solid var(--smoke);
+
+                &:not(:last-child) {
+                    margin-right: 1em;
+                }
+
                 & .count {
-                    color: var(--pets-brand-green);
+                    --size: 1.4em;
+                    font-weight: 600;
+                    width: var(--size);
+                    height: var(--size);
+                    border-radius: 100%;
+                    margin-left: calc(var(--size) / 2);
+
+                    align-items: center;
+                    display: inline-flex;
+                    justify-content: center;
+
+                    background: var(--white);
+                    font-size: calc(var(--size) * .8);
+                    color: var(--pets-brand-dark-green);
+                }
+
+                &[active_count="0"] {
+                    & .count {
+                        width: 0;
+                        margin: 0;
+                        opacity: 0;
+                        overflow: hidden;
+                    }
+                }
+
+                &:not([active_count="0"]) {
+                    color: var(--white);
+                    background: var(--pets-brand-dark-green);
+                    border-color: var(--pets-brand-dark-green);
+                }
+                &:hocus {
+                    color: var(--white);
+                    background: var(--pets-brand-green);
+                    border-color: var(--pets-brand-green);
+                    & .count {
+                        color: var(--pets-brand-green);
+                    }
                 }
             }
         }
@@ -124,6 +138,14 @@ body.pah166_loaded {
 
                     &.facet_header {
                         font-size: 1.25em;
+                        
+                        & .icon {
+                            --size: 1em;
+                            width: var(--size);
+                            height: var(--size);
+                            transform: rotate(-90deg);
+                            transition: all .15s var(--transition-curve);
+                        }
                     }
                 }
 
@@ -150,7 +172,11 @@ body.pah166_loaded {
                     }
                 }
 
-                & .active {
+                & .facet_header.active {
+                    & .icon {
+                        transform: rotate(0deg);
+                    }
+
                     & + .facet_options {
                         overflow: auto;
                         padding: 1.5rem;
