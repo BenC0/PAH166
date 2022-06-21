@@ -63,7 +63,7 @@ function watch_and_update(sort_by) {
         subtree: true,
         childList: true,
         attributes: false,
-    })
+    }, "main_observer")
 }
 
 function action() {

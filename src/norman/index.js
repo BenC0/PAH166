@@ -399,11 +399,12 @@ function watchForChange() {
     childList: true,
     subtree: true
   };
+  var observer_class = arguments.length > 0 && arguments[3] !== undefined ? arguments[3] : "observing";
 
   if (targetNode !== null) {
-    if (!targetNode.classList.contains("observing")) {
+    if (!targetNode.classList.contains(observer_class)) {
       var observer = new MutationObserver(callback);
-      targetNode.classList.add('observing');
+      targetNode.classList.add(observer_class);
       observer.observe(targetNode, config);
     }
   }
