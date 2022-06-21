@@ -25,6 +25,21 @@ function add_sort_by(variation) {
     const sort_by = new Sort()
     variation.log(sort_by)
     sort_by.new_sort._insert(`.sort_and_filter_container[test="pah166"]`, "beforeEnd")
+    sort_by.new_sort.node.addEventListener("click", e => {
+        let t = e.path[0]
+        if(!t.classList.contains("sort_option")) {
+            if(sort_by.new_sort._class().contains("active")) {
+                sort_by.new_sort._class("active", false)
+            } else {
+                sort_by.new_sort._class("active")
+            }
+        }
+    })
+    document.body.addEventListener("click", e => {
+        if(e.target.closest(".sort_by") == null && sort_by.new_sort._class().contains("active")) {
+            sort_by.new_sort._class("active", false)
+        }
+    })
     sort_by.new_sort._find("li.sort_option").forEach(element => {
         element.node.addEventListener("click", e => {
             sort_by._update_old(e, sort_by)
@@ -59,6 +74,7 @@ function watch_and_update(sort_by) {
     let target = document.querySelector("#searchBasedNavigation_widget")
     watchForChange(target, _ => {
         sort_by._update_sort_title()
+        sort_by.new_sort._class("active", false)
     }, {
         subtree: true,
         childList: true,

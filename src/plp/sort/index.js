@@ -26,7 +26,7 @@ export default class Sort extends TestElement {
             <div class="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.6 8.3c0 .1-.1.3-.2.4l-8.2 8.2c-.1 0-.2.1-.4.1s-.3-.1-.4-.2L3.3 8.7c-.1-.1-.2-.3-.2-.4 0-.1.1-.3.2-.4l.8-.9c.1-.1.3-.2.4-.2.2 0 .4.1.5.2l6.9 6.9L18.7 7c.1-.1.3-.2.4-.2s.3.1.4.2l.9.9c.1.1.2.2.2.4z" fill="#000"/></svg>
             </div>
-            <ul name="sort_by_select" id="sort_by_select">
+            <ul name="sort_by_select" id="sort_by_select" class="sort_options">
                 ${this.new_options_html.join("")}
             </ul>
         </div>`

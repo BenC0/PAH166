@@ -56,7 +56,7 @@ body.pah166_loaded {
                 transition: all 0.15s var(--transition-curve);
             }
 
-            &:hocus,
+            /* &:hocus, */
             &.active {
                 & #sort_by_select {
                     --border-radius: 1em;
