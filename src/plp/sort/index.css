@@ -10,20 +10,20 @@ body.pah166_loaded {
             cursor: pointer;
             position: relative;
             background: #fff;
+            height: var(--height);
 
             & #sort_by_select {
                 --border-radius: 36px;
-
-                top: 17px;
+                padding: 0;
                 left: -1px;
                 right: -1px;
                 z-index: -1;
                 max-height: 0;
                 overflow: hidden;
-                padding: 0;
                 position: absolute;
                 background: #ffffff;
                 border: var(--border-style);
+                top: calc(var(--height) / 2);
                 transition: all 0.35s var(--transition-curve);
 
                 & li {
@@ -44,12 +44,27 @@ body.pah166_loaded {
                 }
             }
 
+            & .icon {
+                --size: 16px;
+                width: var(--size);
+                height: var(--size);
+
+                position: absolute;
+                right: calc(var(--size) / 2);
+                transform: translateY(-50%);
+                top: calc((var(--height) / 2) - 1px);
+                transition: all 0.15s var(--transition-curve);
+            }
+
             &:hocus,
             &.active {
                 & #sort_by_select {
                     --border-radius: 1em;
                     max-height: 700px;
                     border-bottom-right-radius: var(--border-radius);
+                }
+                & .icon {
+                    transform: translateY(-50%) rotate(180deg);
                 }
             }
         }

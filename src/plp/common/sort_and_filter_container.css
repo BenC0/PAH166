@@ -9,37 +9,44 @@ body.pah166_loaded {
             align-self: flex-end;
             font-family: "Museo", sans-serif;
 
-            & > div:not(.nMask):not(.quick_filters) {
-                --padding: 1em;
-                --border-style: 1px solid #C8C8C8;
+            & > div:not(.nMask) {
+                --height:  46px;
 
-                width: clamp(120px, 50%, 180px);
-                text-align: left;
-                padding: 0 1.666em;
-                border: var(--border-style);
+                &:not(.quick_filters) {
+                    --padding: 1em;
+                    --border-style: 1px solid #C8C8C8;
 
-                &:only-child {
-                    width: 100%;
-                }
+                    text-align: left;
+                    padding: 0 1em;
+                    position: relative;
+                    border: var(--border-style);
+                    width: clamp(120px, 50%, 180px);
 
-                & .heading {
-                    cursor: pointer;
-                    background: #fff;
-                    padding: var(--padding);
-                }
+                    &:only-child {
+                        width: 100%;
+                    }
 
-                &.filter_by {
-                    border-top-left-radius: var(--border-radius);
-                    border-bottom-left-radius: var(--border-radius);
-                }
-                
-                &.sort_by {
-                    border-left: 0;
-                    border-top-right-radius: var(--border-radius);
-                    &,
-                    & #sort_by_select,
-                    & #sort_by_select:last-child {
-                        border-bottom-right-radius: var(--border-radius);
+                    & .heading {
+                        left: 1em;
+                        cursor: pointer;
+                        position: absolute;
+                        transform: translateY(-50%);
+                        top: calc((var(--height) / 2) - 1px);
+                    }
+
+                    &.filter_by {
+                        border-top-left-radius: var(--border-radius);
+                        border-bottom-left-radius: var(--border-radius);
+                    }
+                    
+                    &.sort_by {
+                        border-left: 0;
+                        border-top-right-radius: var(--border-radius);
+                        &,
+                        & #sort_by_select,
+                        & #sort_by_select:last-child {
+                            border-bottom-right-radius: var(--border-radius);
+                        }
                     }
                 }
             }
