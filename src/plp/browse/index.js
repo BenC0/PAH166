@@ -61,11 +61,9 @@ export default class Browse extends TestElement {
         })
         let x = 0
         let linkCount = 0
-        console.warn(`x: ${x},\nlinkCount: ${linkCount},\ntotal_width: ${total_width},\n${link_widths[linkCount]}`)
         while (x <= total_width) {
             x += link_widths[linkCount]
             linkCount++
-            console.warn(`x: ${x},\nlinkCount: ${linkCount},\ntotal_width: ${total_width},\n${link_widths[linkCount]}`)
         }
         return linkCount - 2
     }
