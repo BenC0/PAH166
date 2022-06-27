@@ -28,5 +28,10 @@ body.pah166_loaded {
         & > *:not(.product-tile) {
             display: none;
         }
+
+        & > .pagination {
+            display: block;
+            grid-column: 1 / span 4;
+        }
     }
 }
