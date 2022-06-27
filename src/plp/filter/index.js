@@ -1,6 +1,5 @@
 import "./index.css"
 import { TestElements, TestElement, getHighestZIndex, watchForChange } from "../../norman";
-import Draggabilly from "draggabilly"
 
 export class PriceFacet {
     constructor(facet) {
@@ -8,69 +7,53 @@ export class PriceFacet {
         this.header = facet._find(".side-nav-level0__header").pop()
         this.header_name = this.header._text()
         this.formatted_name = formatFacetName(this.header_name)
-        this.data_attr = JSON.parse(this.original_node.querySelector(`[data-module="range_slider"]`).getAttribute("data-data"))
         this.is_active = false
         this.index = 0
+        this.global_max = document.querySelector(`[name="maintainMaxPrice"]`).value
         this.html = this.build_template()
-        this.global_min = this.data_attr.min
-        this.global_max = this.data_attr.max
     }
 
     build_template() {
         return `<li class="facet_option" option="${this.formatted_name}" is_active="${this.is_active}">
-            <div class="slider">
-                <input type="hidden" name="pah166_price_global_min" id="pah166_price_global_min" value="${this.global_min}">
-                <input type="hidden" name="pah166_price_global_max" id="pah166_price_global_max" value="${this.global_max}">
-                <input type="hidden" name="pah166_price_min" id="pah166_price_min" value="${this.global_min}">
-                <input type="hidden" name="pah166_price_max" id="pah166_price_max" value="${this.global_max}">
-                <div class="slider_track">
-                    <span class="track"></span>
-                    <div class="slider_handle" for="min" value="0"></div>
-                    <div class="slider_handle" for="max" value="100"></div>
+            <div class="field_row">
+                <div class="field">
+                    <input type="number" name="pah166_price_min" id="pah166_price_min" value="0">
+                    <label for="pah166_price_min">From:</label>
+                </div>
+                <div class="field">
+                    <input type="number" name="pah166_price_max" id="pah166_price_max" value="${this.global_max}">
+                    <label for="pah166_price_max">To:</label>
                 </div>
             </div>
         </li>`
     }
 
-    calc_x_offset_as_percent(x = 0, handle_width) {
-        let maxX = this.element.node.querySelector(`.slider_track .track`).offsetWidth - handle_width
-        return x / maxX
+    update_price_inputs() {
+        let new_min = this.element.node.querySelector(`#pah166_price_min`)
+        let new_max = this.element.node.querySelector(`#pah166_price_max`)
+        let original_min = document.querySelector(`#inputMinPrice`)
+        let original_max = document.querySelector(`#inputMaxPrice`)
+        original_min.value = `£${new_min.value}`
+        original_max.value = `£${new_max.value}`
+        SearchBasedNavigationDisplayJS.doSearchFilter()
     }
 
-    convert_percent_to_price(perc) {
-        return parseFloat(this.global_max * perc).toFixed(2)
+    reinit() {
+        if(!!this.element) {
+            let new_min = this.element.node.querySelector(`#pah166_price_min`)
+            let new_max = this.element.node.querySelector(`#pah166_price_max`)
+            let original_min = document.querySelector(`#inputMinPrice`)
+            let original_max = document.querySelector(`#inputMaxPrice`)
+            new_min.value = parseInt(original_min.value.replace(/£/g, ""))
+            new_max.value = parseInt(original_max.value.replace(/£/g, ""))
+        }
     }
 
     init() {
         this.element = new TestElement(`.facet_option[option="Price"]`)
-        this.handles = []
-        this.draggie_options = {
-            axis: "x",
-            containment: true,
-        }
-        this.element._find(".slider_handle").forEach(handle => {
-            console.warn(handle)
-            let draggie = new Draggabilly(handle.node, this.draggie_options)
-            draggie.on("dragMove", e => {
-                // console.warn("dragMove", e)
-            })
-            draggie.on("dragEnd", e => {
-                // console.warn("dragEnd", e)
-                // Update original and new inputs
-                this.handles.forEach(h => {
-                    let relevant_input = this.element.node.querySelector(`[name="pah166_price_${h.handle.node.getAttribute("for")}"]`)
-                    if(!!relevant_input) {
-                        let x = draggie.position.x
-                        let percent_offset = this.calc_x_offset_as_percent(x, h.handle.node.offsetWidth)
-                        let converted = this.convert_percent_to_price(percent_offset)
-                        relevant_input.value = converted
-                        h.handle.node.setAttribute("value", converted)
-                    }
-                })
-            })
-            this.handles.push({
-                draggie, 
-                handle,
+        this.element._find("input").forEach((input) => {
+            input.node.addEventListener("change", _ => {
+                this.update_price_inputs()
             })
         })
     }
@@ -293,22 +276,28 @@ export class TestFilter {
             let facet_el = document.querySelector(`.facet_options[facet="${facet_name}"]`)
             if(!!facet_el) {
                 let facet_container = new TestElement(`.facet_options[facet="${facet_name}"]`)
-                facet.values.forEach(value => {
-                    let option_name = value.formatted_name
-                    let preexisting = facet_el.querySelector(`.facet_option[option="${option_name}"]`)
-                    let exists = !!preexisting
-                    if(exists) {
-                        // if option already exists
-                        // update quantity & active state
-                        preexisting.querySelector(".quantity").textContent = value.quantity
-                        preexisting.setAttribute("is_active", value.is_active)
-                    } else {
-                        // if option not exists
-                        // create option and add to facet
-                        let value_html = this._create_option_html(value)
-                        facet_container._append(value_html)
+                if(!!facet.values) {
+                    facet.values.forEach(value => {
+                        let option_name = value.formatted_name
+                        let preexisting = facet_el.querySelector(`.facet_option[option="${option_name}"]`)
+                        let exists = !!preexisting
+                        if(exists) {
+                            // if option already exists
+                            // update quantity & active state
+                            preexisting.querySelector(".quantity").textContent = value.quantity
+                            preexisting.setAttribute("is_active", value.is_active)
+                        } else {
+                            // if option not exists
+                            // create option and add to facet
+                            let value_html = this._create_option_html(value)
+                            facet_container._append(value_html)
+                        }
+                    })
+                } else {
+                    if (!!facet.reinit) {
+                        facet.reinit()
                     }
-                })
+                }
             } else {
                 // if facet doesn't already exist, create it
                 let new_facet_html = this._create_facet_html(facet)
