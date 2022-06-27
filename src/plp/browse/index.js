@@ -46,4 +46,27 @@ export default class Browse extends TestElement {
     _hide_links() {
         this.new_links_element._class("show_all", false)
     }
+
+    format_px_as_x(px) {
+        return parseInt(px.replace(/[a-zA-Z]/g, ""))
+    }
+
+    calc_cutoff() {
+        let total_width = this.new_links_element.node.offsetWidth
+        let links = this.new_links_element.node.querySelectorAll(".browse_link")
+        let link_widths = [...links].map(a => {
+            let width = a.offsetWidth
+            let marginRight = this.format_px_as_x(getComputedStyle(a).marginRight)
+            return width + marginRight
+        })
+        let x = 0
+        let linkCount = 0
+        console.warn(`x: ${x},\nlinkCount: ${linkCount},\ntotal_width: ${total_width},\n${link_widths[linkCount]}`)
+        while (x <= total_width) {
+            x += link_widths[linkCount]
+            linkCount++
+            console.warn(`x: ${x},\nlinkCount: ${linkCount},\ntotal_width: ${total_width},\n${link_widths[linkCount]}`)
+        }
+        return linkCount - 2
+    }
 }

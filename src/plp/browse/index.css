@@ -6,6 +6,7 @@ body.pah166_loaded {
     
     & [test="pah166"] {
         &.browse_links {
+            width: 100%;
             display: flex;
             font-size: 16px;
             flex-wrap: wrap;
@@ -27,10 +28,9 @@ body.pah166_loaded {
             transition: all .1s var(--transition-curve);
             border-radius: var(--border-radius);
 
-            &:first-child() {
-                margin-left: 0;
+            &:last-child {
+                margin-right: 0;
             }
-
 
             &:hocus {
                 color: #ffffff;
@@ -58,10 +58,8 @@ body.pah166_loaded {
                 & .show_links {
                     display: none;
                 }
-            }
-            &:not(.show_all) {
-                & .browse_link:nth-child(n + 6):not([href="#toggle_links"]) {
-                    display: none;
+                & .browse_link {
+                    display: block !important;
                 }
             }
         }

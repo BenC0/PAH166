@@ -59,6 +59,15 @@ export class PriceFacet {
     }
 }
 
+export function getFacetName(facet) {
+    let header = facet._find(".side-nav-level0__header").pop()
+    if(!!header) {
+        return header._text()
+    } else {
+        return null
+    }
+}
+
 export function formatFacetName(name) { 
     name = name.trim()
     name = name.replace(/  /g, " ");
@@ -112,14 +121,15 @@ export class Facets extends TestElements {
         this.facets = []
         this.facets_active = false
         this._loop(facet => {
-            let fc = new Facet(facet)
-            if(fc.active_values.length !== 0) {
-                this.facets_active = true
-            }
-            if (fc.header_name !== "Price") {
-                this.facets.push(fc)
-            } else {
+            let facet_name = getFacetName(facet)
+            if(!!facet_name.toLowerCase().match("price")) {
                 this.facets.push(new PriceFacet(facet))
+            } else {
+                let fc = new Facet(facet)
+                if(fc.active_values.length !== 0) {
+                    this.facets_active = true
+                }
+                this.facets.push(fc)
             }
         })
     }
@@ -245,7 +255,7 @@ export class TestFilter {
     _init_quick_facets() {
         document.querySelector(`.sort_and_filter_container[test="pah166"] .quick_filters`).innerHTML = ""
         this.facets.facets.forEach((facet, index) => {
-            if(index < 5) {
+            if(index < 5 && !!facet.quick_facet) {
                 facet.quick_facet._insert(`.sort_and_filter_container[test="pah166"] .quick_filters`, "beforeEnd")
                 facet.quick_facet.node.addEventListener("click", e=> {
                     e.preventDefault()

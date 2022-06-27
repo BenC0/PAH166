@@ -59,9 +59,17 @@ function add_browse_by(variation) {
             variation.track_event(`Clicked Browse Link: ${e.target.getAttribute("href")}`)
         })
     })
-
+    
     browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
-    if (browse_by.original_links.nodes.length > 6) {
+    let cutoff = browse_by.calc_cutoff()
+    if (browse_by.original_links.nodes.length > cutoff) {
+        browse_by.new_links._loop((element, index) => {
+            if (index <= cutoff) {
+                element.node.style.display = "block"
+            } else {
+                element.node.style.display = "none"
+            }
+        })
         browse_by.new_links_toggle.node.addEventListener("click", e => {
             browse_by._toggle_links()
         })
