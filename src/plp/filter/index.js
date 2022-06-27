@@ -396,7 +396,7 @@ export class Filter extends TestElement {
         this.filters_clear.forEach(el => {
             el.node.addEventListener("click", _ => {
                 this.variation.track_event(`Filters: Cleared`)
-                SearchBasedNavigationDisplayJS.clearSearchFilter
+                SearchBasedNavigationDisplayJS.clearSearchFilter()
             })
         })
         this.cta._insert(`.sort_and_filter_container[test="pah166"]`, "beforeEnd")
