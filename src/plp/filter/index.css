@@ -8,7 +8,7 @@ body.pah166_loaded {
     & .sort_and_filter_container {
         & .filter_by {
             cursor: pointer;
-            
+
             & .heading {
                 display: flex;
                 align-items: center;
@@ -229,6 +229,66 @@ body.pah166_loaded {
                             background-color: var(--pets-brand-green);
                         }
                     }
+                }
+
+                & .slider {
+                    width: 100%;
+                    overflow-x: hidden;
+
+                    & .slider_track {
+                        --spacing: 10px;
+                        width: 100%;
+                        display: flex;
+                        position: relative;
+                        height: 60px;
+                        padding: 0 var(--spacing);
+
+                        & .track {
+                            top: var(--spacing);
+                            left: var(--spacing);
+                            right: var(--spacing);
+                            height: 1px;
+                            position: absolute;
+                            background: var(--pets-brand-green);
+                        }
+
+                        & .slider_handle {
+                            --handle-size: 12px;
+                            top: 4px;
+                            background: var(--white);
+                            width: var(--handle-size);
+                            height: var(--handle-size);
+                            position: absolute !important;
+                            border-radius: var(--handle-size);
+                            border: 2px solid var(--pets-brand-green);
+
+                            &::before {
+                                font-size: 16px;
+                                font-weight: 600;
+                                position: absolute;
+                                top: calc(100% + .5em);
+                                content: "£" attr(value);
+                                transform: translateX(-50%);
+                            }
+
+                            &::after {
+                                top: 50%;
+                                height: 1px;
+                                content: "";
+                                width: 500px;
+                                position: absolute;
+                                background: #B3B3B3;
+                            }
+
+                            &:first-of-type::after {
+                                right: 100%;
+                            }
+
+                            &:last-of-type::after {
+                                left: 100%;
+                            }
+                        }
+                    }   
                 }
             }
             

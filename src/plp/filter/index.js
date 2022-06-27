@@ -1,5 +1,80 @@
 import "./index.css"
-import { TestElements, TestElement, getHighestZIndex, watchForChange, debounce, Test } from "../../norman";
+import { TestElements, TestElement, getHighestZIndex, watchForChange } from "../../norman";
+import Draggabilly from "draggabilly"
+
+export class PriceFacet {
+    constructor(facet) {
+        this.original_node = facet.node
+        this.header = facet._find(".side-nav-level0__header").pop()
+        this.header_name = this.header._text()
+        this.formatted_name = formatFacetName(this.header_name)
+        this.data_attr = JSON.parse(this.original_node.querySelector(`[data-module="range_slider"]`).getAttribute("data-data"))
+        this.is_active = false
+        this.index = 0
+        this.html = this.build_template()
+        this.global_min = this.data_attr.min
+        this.global_max = this.data_attr.max
+    }
+
+    build_template() {
+        return `<li class="facet_option" option="${this.formatted_name}" is_active="${this.is_active}">
+            <div class="slider">
+                <input type="hidden" name="pah166_price_global_min" id="pah166_price_global_min" value="${this.global_min}">
+                <input type="hidden" name="pah166_price_global_max" id="pah166_price_global_max" value="${this.global_max}">
+                <input type="hidden" name="pah166_price_min" id="pah166_price_min" value="${this.global_min}">
+                <input type="hidden" name="pah166_price_max" id="pah166_price_max" value="${this.global_max}">
+                <div class="slider_track">
+                    <span class="track"></span>
+                    <div class="slider_handle" for="min" value="0"></div>
+                    <div class="slider_handle" for="max" value="100"></div>
+                </div>
+            </div>
+        </li>`
+    }
+
+    calc_x_offset_as_percent(x = 0, handle_width) {
+        let maxX = this.element.node.querySelector(`.slider_track .track`).offsetWidth - handle_width
+        return x / maxX
+    }
+
+    convert_percent_to_price(perc) {
+        return parseFloat(this.global_max * perc).toFixed(2)
+    }
+
+    init() {
+        this.element = new TestElement(`.facet_option[option="Price"]`)
+        this.handles = []
+        this.draggie_options = {
+            axis: "x",
+            containment: true,
+        }
+        this.element._find(".slider_handle").forEach(handle => {
+            console.warn(handle)
+            let draggie = new Draggabilly(handle.node, this.draggie_options)
+            draggie.on("dragMove", e => {
+                // console.warn("dragMove", e)
+            })
+            draggie.on("dragEnd", e => {
+                // console.warn("dragEnd", e)
+                // Update original and new inputs
+                this.handles.forEach(h => {
+                    let relevant_input = this.element.node.querySelector(`[name="pah166_price_${h.handle.node.getAttribute("for")}"]`)
+                    if(!!relevant_input) {
+                        let x = draggie.position.x
+                        let percent_offset = this.calc_x_offset_as_percent(x, h.handle.node.offsetWidth)
+                        let converted = this.convert_percent_to_price(percent_offset)
+                        relevant_input.value = converted
+                        h.handle.node.setAttribute("value", converted)
+                    }
+                })
+            })
+            this.handles.push({
+                draggie, 
+                handle,
+            })
+        })
+    }
+}
 
 export function formatFacetName(name) { 
     name = name.trim()
@@ -60,6 +135,8 @@ export class Facets extends TestElements {
             }
             if (fc.header_name !== "Price") {
                 this.facets.push(fc)
+            } else {
+                this.facets.push(new PriceFacet(facet))
             }
         })
     }
@@ -96,8 +173,12 @@ export class TestFilter {
         this.facets = facets
         this.state = state
         this.facets_html = []
+        this.price_facet = null
         this.facets.facets.forEach((facet, index) => {
             this.facets_html.push(this._create_facet_html(facet, index))
+            if(facet.header_name == "Price") {
+                this.price_facet = facet
+            }
         })
         this._init_quick_facets()
         this.html = `<div test="pah166" class="filters ${this.state}" style="z-index: ${getHighestZIndex("*") + 1}">
@@ -120,6 +201,9 @@ export class TestFilter {
         </div>`
         this.element = new TestElement(this.html)
         this.element._insert("body", "afterBegin")
+        if(!!this.price_facet) {
+            this.price_facet.init()
+        }
         this._update_cta_count()
         this.facet_headers = this.element._find(".facet_header")
         this.facet_headers.forEach(header => {
@@ -129,10 +213,12 @@ export class TestFilter {
         })
         this.facet_options = this.element._find(".facet_option")
         this.facet_options.forEach(option => {
-            option.node.addEventListener("click", e => {
-                this._select_facet_option(e.currentTarget, this.facets.facets)
-                this._refresh_facets()
-            })
+            if(option.node.getAttribute("option") !== "Price") {
+                option.node.addEventListener("click", e => {
+                    this._select_facet_option(e.currentTarget, this.facets.facets)
+                    this._refresh_facets()
+                })
+            }
         })
         this.product_count = this._get_product_count()
 
@@ -247,9 +333,16 @@ export class TestFilter {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.6 8.3c0 .1-.1.3-.2.4l-8.2 8.2c-.1 0-.2.1-.4.1s-.3-.1-.4-.2L3.3 8.7c-.1-.1-.2-.3-.2-.4 0-.1.1-.3.2-.4l.8-.9c.1-.1.3-.2.4-.2.2 0 .4.1.5.2l6.9 6.9L18.7 7c.1-.1.3-.2.4-.2s.3.1.4.2l.9.9c.1.1.2.2.2.4z" fill="#000"/></svg>
             </div>
         </header>`
-        let options_html = `<ul class="facet_options" facet="${facet.formatted_name}">
-            ${facet.values.map((value, index) => this._create_option_html(value, index)).join("")}
-        </ul>`
+        let options_html = ``
+        if(facet.header_name == "Price") {
+            options_html = `<ul class="facet_options" facet="${facet.formatted_name}">
+                ${facet.html}
+            </ul>`
+        } else {
+            options_html = `<ul class="facet_options" facet="${facet.formatted_name}">
+                ${facet.values.map((value, index) => this._create_option_html(value, index)).join("")}
+            </ul>`
+        }
         return `<div class="facet">
             ${header_html}
             ${options_html}

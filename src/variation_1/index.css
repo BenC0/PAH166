@@ -11,6 +11,7 @@ body.pah166_loaded {
         --pets-brand-green: #54B947;
         --pets-brand-purple: #5A2C82;
         --pets-brand-dark-green: #00551C;
+        --pets-brand-green: #54B947;
         --transition-curve: cubic-bezier(0.14, 0.51, 0.95, 0.88);
     }
 
