@@ -186,11 +186,13 @@ body.pah166_loaded {
 
                 & .cta_container {
                     bottom: 0;
+                    z-index: 1;
                     position: sticky;
 
+                    order: 1;
                     flex-grow: 1;
                     display: flex;
-                    align-items: center;
+                    align-items: flex-end;
                     justify-content: space-between;
 
                     padding: 1.25em 2.8125em;
