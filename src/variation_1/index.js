@@ -17,7 +17,7 @@ function update_layout() {
 }
 
 function add_filter(variation) {
-    const filter = new Filter()
+    const filter = new Filter(variation)
     variation.log(filter)
 }
 
