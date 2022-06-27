@@ -152,7 +152,8 @@ export class TestQuickFacet extends TestElement {
 }
 
 export class TestFilter {
-    constructor(facets, state) {
+    constructor(facets, state, variation) {
+        this.variation = variation
         this.facets = facets
         this.state = state
         this.facets_html = []
@@ -254,7 +255,7 @@ export class TestFilter {
                         document.querySelectorAll(".facet_header").forEach(el => el.classList.remove("active"))
                         target_facet.classList.add("active")
                         this.element._class("active")
-                        variation.track_event(`Filters: Quick Filter Clicked`)
+                        this.variation.track_event(`Filters: Quick Filter Clicked`)
                     }
                 })
             }
@@ -342,10 +343,10 @@ export class TestFilter {
     _toggle_facet(node) {
         if (!node.classList.contains("active")) {
             node.classList.add("active")
-            variation.track_event(`Filters: Facet Opened`)
+            this.variation.track_event(`Filters: Facet Opened`)
         } else {
             node.classList.remove("active")
-            variation.track_event(`Filters: Facet Closed`)
+            this.variation.track_event(`Filters: Facet Closed`)
         }
     }
 
@@ -364,7 +365,7 @@ export class TestFilter {
     _select_facet_option(target, facets) {
         let selected_option = this._find_facet_option(target)
         selected_option.click()
-        variation.track_event(`Filters: Facet Option Selected`)
+        this.variation.track_event(`Filters: Facet Option Selected`)
     }
 }
 
@@ -373,7 +374,7 @@ export class Filter extends TestElement {
         super(`#facetSection`)
         this.variation = variation
         this.facets = new Facets()
-        this.new_filters = new TestFilter(this.facets, "")
+        this.new_filters = new TestFilter(this.facets, "", this.variation)
         this.cta = new FilterButton()
         this.filters_close = this.new_filters.element._find(".close, .background, .cta.view")
         this.filters_close.forEach(close => {
@@ -384,7 +385,7 @@ export class Filter extends TestElement {
         this.filters_clear = this.new_filters.element._find(".cta.clear")
         this.filters_clear.forEach(el => {
             el.node.addEventListener("click", _ => {
-                variation.track_event(`Filters: Cleared`)
+                this.variation.track_event(`Filters: Cleared`)
                 SearchBasedNavigationDisplayJS.clearSearchFilter
             })
         })
@@ -405,12 +406,12 @@ export class Filter extends TestElement {
     _show_filters() {
         this.new_filters.element._class("active")
         document.querySelectorAll("body, html").forEach(el => el.style.overflow = "hidden")
-        variation.track_event(`Filters: Displayed`)
+        this.variation.track_event(`Filters: Displayed`)
     }
     
     _hide_filters() {
         this.new_filters.element._class("active", false)
         document.querySelectorAll("body, html").forEach(el => el.style.overflow = "auto")
-        variation.track_event(`Filters: Hidden`)
+        this.variation.track_event(`Filters: Hidden`)
     }
 }
