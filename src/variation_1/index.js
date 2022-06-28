@@ -64,7 +64,7 @@ function add_browse_by(variation) {
     let cutoff = browse_by.calc_cutoff()
     if (browse_by.original_links.nodes.length > cutoff) {
         browse_by.new_links._loop((element, index) => {
-            if (index <= cutoff) {
+            if (index < cutoff) {
                 element.node.style.display = "block"
             } else {
                 element.node.style.display = "none"

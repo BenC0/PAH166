@@ -65,6 +65,6 @@ export default class Browse extends TestElement {
             x += link_widths[linkCount]
             linkCount++
         }
-        return linkCount - 2
+        return linkCount - 1
     }
 }
