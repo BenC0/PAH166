@@ -71,6 +71,7 @@ function add_browse_by(variation) {
             }
         })
         browse_by.new_links_toggle.node.addEventListener("click", e => {
+            e.preventDefault()
             browse_by._toggle_links()
         })
     } else {
