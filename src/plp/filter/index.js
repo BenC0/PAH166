@@ -398,6 +398,7 @@ export class Filter extends TestElement {
         this.filters_close = this.new_filters.element._find(".close, .background, .cta.view")
         this.filters_close.forEach(close => {
             close.node.addEventListener("click", e => {
+                e.preventDefault()
                 this._hide_filters()
             })
         })

@@ -49,33 +49,35 @@ function add_sort_by(variation) {
 }
 
 function add_browse_by(variation) {
-    const browse_by = new Browse()
-    variation.log(browse_by)
-    browse_by.new_links_element._insert(`.sort_and_filter_container[test="pah166"]`, "beforeBegin")
-    browse_by.new_links = new TestElements(`${browse_by.new_links_element.selector} .browse_link:not([href="#toggle_links"])`)
-    browse_by.new_links._loop(element => {
-        element.node.addEventListener("click", e => {
-            variation.track_event(`Clicked Browse Link`)
-            variation.track_event(`Clicked Browse Link: ${e.target.getAttribute("href")}`)
+    if(!!document.querySelector(`[data-module="side_nav_category"]`)) {
+        const browse_by = new Browse()
+        variation.log(browse_by)
+        browse_by.new_links_element._insert(`.sort_and_filter_container[test="pah166"]`, "beforeBegin")
+        browse_by.new_links = new TestElements(`${browse_by.new_links_element.selector} .browse_link:not([href="#toggle_links"])`)
+        browse_by.new_links._loop(element => {
+            element.node.addEventListener("click", e => {
+                variation.track_event(`Clicked Browse Link`)
+                variation.track_event(`Clicked Browse Link: ${e.target.getAttribute("href")}`)
+            })
         })
-    })
-    
-    browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
-    let cutoff = browse_by.calc_cutoff()
-    if (browse_by.original_links.nodes.length > cutoff) {
-        browse_by.new_links._loop((element, index) => {
-            if (index < cutoff) {
-                element.node.style.display = "block"
-            } else {
-                element.node.style.display = "none"
-            }
-        })
-        browse_by.new_links_toggle.node.addEventListener("click", e => {
-            e.preventDefault()
-            browse_by._toggle_links()
-        })
-    } else {
-        browse_by.new_links_toggle.node.remove()
+        
+        browse_by.new_links_toggle = new TestElement(`${browse_by.new_links_element.selector} [href="#toggle_links"]`)
+        let cutoff = browse_by.calc_cutoff()
+        if (browse_by.original_links.nodes.length > cutoff) {
+            browse_by.new_links._loop((element, index) => {
+                if (index < cutoff) {
+                    element.node.style.display = "block"
+                } else {
+                    element.node.style.display = "none"
+                }
+            })
+            browse_by.new_links_toggle.node.addEventListener("click", e => {
+                e.preventDefault()
+                browse_by._toggle_links()
+            })
+        } else {
+            browse_by.new_links_toggle.node.remove()
+        }
     }
 }
 
