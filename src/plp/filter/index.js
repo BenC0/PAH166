@@ -8,6 +8,8 @@ export class PriceFacet {
         this.header_name = this.header._text()
         this.formatted_name = formatFacetName(this.header_name)
         this.is_active = false
+        this.active_values = []
+        this.active_values_str = ""
         this.index = 0
         this.global_max = document.querySelector(`[name="maintainMaxPrice"]`).value
         this.html = this.build_template()
@@ -106,6 +108,7 @@ export class Facet {
                 this.active_values.push(fO.name)
             }
         })
+        this.active_values_str = this.active_values.join(", ") || ""
         this.active_count = this.active_values.length
         this.quick_facet = new TestQuickFacet(this)
     }
@@ -288,6 +291,10 @@ export class TestFilter {
             let facet_el = document.querySelector(`.facet_options[facet="${facet_name}"]`)
             if(!!facet_el) {
                 let facet_container = new TestElement(`.facet_options[facet="${facet_name}"]`)
+                let facet_header = new TestElement(`.facet_header[facet="${facet_name}"]`)
+                if(!!facet_header) {
+                    facet_header.node.querySelector(".active_options").textContent = facet.active_values_str
+                }
                 if(!!facet.values) {
                     facet.values.forEach(value => {
                         let option_name = value.formatted_name
@@ -328,11 +335,13 @@ export class TestFilter {
     }
     
     _create_facet_html(facet, index) {
+        console.warn(facet)
         let header_html = `<header class="facet_header" facet="${facet.formatted_name}">
             <span class="name">${facet.header_name}</span>
             <div class="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.6 8.3c0 .1-.1.3-.2.4l-8.2 8.2c-.1 0-.2.1-.4.1s-.3-.1-.4-.2L3.3 8.7c-.1-.1-.2-.3-.2-.4 0-.1.1-.3.2-.4l.8-.9c.1-.1.3-.2.4-.2.2 0 .4.1.5.2l6.9 6.9L18.7 7c.1-.1.3-.2.4-.2s.3.1.4.2l.9.9c.1.1.2.2.2.4z" fill="#000"/></svg>
             </div>
+            <div class="active_options">${facet.active_values_str}</div>
         </header>`
         let options_html = ``
         if(facet.header_name == "Price") {

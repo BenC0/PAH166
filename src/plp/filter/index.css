@@ -43,6 +43,7 @@ body.pah166_loaded {
                     width: var(--size);
                     height: var(--size);
                     border-radius: 100%;
+                    pointer-events: none;
                     margin-left: calc(var(--size) / 2);
 
                     align-items: center;
@@ -139,6 +140,7 @@ body.pah166_loaded {
 
                     &.facet_header {
                         font-size: 1.25em;
+                        flex-wrap: wrap;
                         
                         & .icon {
                             --size: 1em;
@@ -146,6 +148,19 @@ body.pah166_loaded {
                             height: var(--size);
                             transform: rotate(-90deg);
                             transition: all .15s var(--transition-curve);
+                        }
+
+                        & .active_options {
+                            width: 100%;
+                            flex-grow: 1;
+                            font-size: .8em;
+                            font-weight: 300;
+                            margin-top: .8em;
+                            color: #666666;
+
+                            &:empty {
+                                display: none;
+                            }
                         }
                     }
                 }
@@ -182,6 +197,10 @@ body.pah166_loaded {
                         overflow: auto;
                         padding: 1.5rem;
                         max-height: 310px;
+                    }
+
+                    & .active_options {
+                        display: none;
                     }
                 }
 
