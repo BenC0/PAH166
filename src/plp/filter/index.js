@@ -204,17 +204,13 @@ export class TestFilter {
         this._update_cta_count()
         this.facet_headers = this.element._find(".facet_header")
         this.facet_headers.forEach(header => {
-            header.node.addEventListener("click", e => {
-                this._toggle_facet(e.currentTarget)
-            })
+            this._init_facet_header_click(header.node)
         })
         this.facet_options = this.element._find(".facet_option")
         this.facet_options.forEach(option => {
             if(option.node.getAttribute("option") !== "Price") {
-                option.node.addEventListener("click", e => {
-                    this._select_facet_option(e.currentTarget, this.facets.facets)
-                    this._refresh_facets()
-                })
+                // Add listener here
+                this._init_facet_click(option.node)
             }
         })
         this.product_count = this._get_product_count()
@@ -244,6 +240,25 @@ export class TestFilter {
         this.product_count = this._get_product_count()
         let cta = this.element._find(".cta_container .view")
         cta.forEach(c => c._text(`View (${this.product_count})`))
+    }
+
+    _init_facet_header_click(node) {
+        if(!node.classList.contains("__facet_header_click")) {
+            node.classList.add("__facet_header_click")
+            node.addEventListener("click", e => {
+                this._toggle_facet(e.currentTarget)
+            })
+        }
+    }
+
+    _init_facet_click(node) {
+        if(!node.classList.contains("__facet_click")) {
+            node.classList.add("__facet_click")
+            node.addEventListener("click", e => {
+                this._select_facet_option(e.currentTarget, this.facets.facets)
+                this._refresh_facets()
+            })
+        }
     }
 
     _get_product_count() {
@@ -293,6 +308,7 @@ export class TestFilter {
                 let facet_container = new TestElement(`.facet_options[facet="${facet_name}"]`)
                 let facet_header = new TestElement(`.facet_header[facet="${facet_name}"]`)
                 if(!!facet_header) {
+                    this._init_facet_header_click(facet_header.node)
                     facet_header.node.querySelector(".active_options").textContent = facet.active_values_str
                 }
                 if(!!facet.values) {
@@ -309,7 +325,9 @@ export class TestFilter {
                             // if option not exists
                             // create option and add to facet
                             let value_html = this._create_option_html(value)
-                            facet_container._append(value_html)
+                            let node = facet_container._append(value_html)
+                            // Add listener here
+                            this._init_facet_click(node)
                         }
                     })
                 } else {
@@ -321,7 +339,17 @@ export class TestFilter {
                 // if facet doesn't already exist, create it
                 let new_facet_html = this._create_facet_html(facet)
                 let container = new TestElement(".filters[test=pah166] .facets")
-                container._append(new_facet_html)
+                let new_facet = container._append(new_facet_html)
+                let facet_header = new_facet.querySelector(`.facet_header[facet="${facet_name}"]`)
+                let facet_options = new_facet.querySelectorAll(`.facet_options[facet="${facet_name}"] .facet_option`)
+                this._init_facet_header_click(facet_header)
+                facet_options.forEach(option => {
+                    if(option.getAttribute("option") !== "Price") {
+                        // Add listener here
+                        this._init_facet_click(option)
+                    }
+                })
+
             }
         })
     }

@@ -7,7 +7,11 @@ import { Filter, FilterButton } from "../plp/filter"
 import _init_sort_and_filter_container from "../plp/common/init_sort_and_filter_container"
 
 const conditions = _ => {
-    return !!document.querySelector("body")
+    let conditions = [
+        !!document.querySelector(`[data-module="container_80"]`),
+        !!document.querySelector(`#searchBasedNavigation_widget`),
+    ]
+    return conditions.every(a => a)
 }
 
 function update_layout() {

@@ -2,7 +2,11 @@ import test_config from "../test_config.js"
 import { Variant, TestElement, TestElements } from "../norman"
 
 const conditions = _ => {
-    return !!document.querySelector("body")
+    let conditions = [
+        !!document.querySelector(`[data-module="container_80"]`),
+        !!document.querySelector(`#searchBasedNavigation_widget`),
+    ]
+    return conditions.every(a => a)
 }
 
 function action() {
