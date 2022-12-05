@@ -17,5 +17,5 @@ function fallback() {
     this.log("Test can't run, fallback loaded", true)
 }
 
-const variation = new Variant(test_config, "Variation 1", conditions, action, fallback)
+const variation = new Variant(test_config, "Control", conditions, action, fallback)
 variation.run()

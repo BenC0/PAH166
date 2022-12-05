@@ -19,7 +19,11 @@ body.pah166_loaded {
         display: none;
     }
 
-    & [data-module="layout_product_tile_holder"] {
+    & .container-100 .genericESpot {
+        width: 100%;
+    }
+
+    & *:not(.br_rel_holder) > [data-module="layout_product_tile_holder"] {
         display: grid;
         grid-gap: 1rem;
         grid-template-rows: auto;

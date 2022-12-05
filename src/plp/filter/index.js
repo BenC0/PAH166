@@ -290,7 +290,29 @@ export class TestFilter {
         })
     }
 
+    _validate_facets() {
+        let options = document.querySelectorAll('.facet_option')
+        options.forEach(option => {
+            if(option.getAttribute("option") != "Price") {
+                let hasValidCounterPart = !!this._find_facet_option(option)
+                if(!hasValidCounterPart) {
+                    option.remove()
+                }
+            }
+        })
+        let headers = document.querySelectorAll('.facet_header')
+        headers.forEach(header => {
+            if(header.getAttribute("facet") != "Price") {
+                    let optionsExist = !!header.parentNode.querySelector('.facet_option')
+                if(!optionsExist) {
+                    header.parentNode.remove()
+                }
+            }
+        })
+    }
+
     _refresh_facets() {
+        this.variation.log("Refreshing facets")
         this.facets = new Facets()
         this._init_quick_facets()
         let filters_clear = this.element._find(".cta_container .clear")
@@ -352,6 +374,8 @@ export class TestFilter {
 
             }
         })
+
+        this._validate_facets()
     }
 
     _create_option_html(option, index) {
@@ -363,7 +387,6 @@ export class TestFilter {
     }
     
     _create_facet_html(facet, index) {
-        console.warn(facet)
         let header_html = `<header class="facet_header" facet="${facet.formatted_name}">
             <span class="name">${facet.header_name}</span>
             <div class="icon">
@@ -381,7 +404,7 @@ export class TestFilter {
                 ${facet.values.map((value, index) => this._create_option_html(value, index)).join("")}
             </ul>`
         }
-        return `<div class="facet">
+        return `<div class="facet" facet="${facet.formatted_name}">
             ${header_html}
             ${options_html}
         </div>`

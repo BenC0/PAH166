@@ -126,6 +126,10 @@ body.pah166_loaded {
                         flex-grow: 1;
                     }
                 }
+
+                & .facet[facet="Price"] {
+                    order: 1;
+                }
                 
                 & .facet,
                 & header:not(.facet_header) {
@@ -209,7 +213,7 @@ body.pah166_loaded {
                     z-index: 1;
                     position: sticky;
 
-                    order: 1;
+                    order: 2;
                     flex-grow: 1;
                     display: flex;
                     align-items: flex-end;
